@@ -1,3 +1,26 @@
+const cvFileDownloadOptions = [
+  {
+    language: "es",
+    shortLabel: "ESP",
+    labels: {
+      es: "Curriculum (ES)",
+      en: "Spanish CV (ES)"
+    },
+    url: "/api/cv/files/es",
+    fileName: "DanielSoria-CV-ES.pdf"
+  },
+  {
+    language: "en",
+    shortLabel: "ENG",
+    labels: {
+      es: "Curriculum (EN)",
+      en: "Resume (EN)"
+    },
+    url: "/api/cv/files/en",
+    fileName: "DanielSoria-CV-EN.pdf"
+  }
+];
+
 const cvData = {
   defaultLanguage: "es",
   languages: {
@@ -83,7 +106,8 @@ const cvData = {
         phone: "+52 473 144 7367",
         message: "Me entusiasma aportar en iniciativas que combinen IA, IoT y productos digitales de próxima generación."
       },
-      testimonials: []
+      testimonials: [],
+      cvFiles: cvFileDownloadOptions
     },
     en: {
       name: "Daniel Soria González",
@@ -167,7 +191,8 @@ const cvData = {
         phone: "+52 473 144 7367",
         message: "Excited to contribute to initiatives that blend AI, IoT, and next-generation digital products."
       },
-      testimonials: []
+      testimonials: [],
+      cvFiles: cvFileDownloadOptions
     }
   }
 };

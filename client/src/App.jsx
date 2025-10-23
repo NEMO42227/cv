@@ -117,6 +117,7 @@ const App = () => {
             language={language}
             onToggleLanguage={handleLanguageToggle}
             canToggleLanguage={availableLanguages.length > 1}
+            cvFiles={currentProfile.cvFiles}
           />
         </div>
 

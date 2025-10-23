@@ -23,8 +23,11 @@ const NavigationBar = ({
   availability,
   language,
   onToggleLanguage,
-  canToggleLanguage
+  canToggleLanguage,
+  cvFiles
 }) => {
+  const downloads = Array.isArray(cvFiles) ? cvFiles : [];
+
   return (
     <motion.nav
       className="navigation"
@@ -63,9 +66,34 @@ const NavigationBar = ({
             <FiGlobe /> {labels.languageToggle[language] || labels.languageToggle.es}
           </button>
         )}
-        <a className="pill-button" href="#contacto">
-          <FiDownload /> {labels.downloadCta[language] || labels.downloadCta.es}
-        </a>
+        {downloads.length > 0 ? (
+          downloads.map((file) => {
+            const shortLabel =
+              (file.shortLabel && file.shortLabel.toUpperCase()) ||
+              (file.language && file.language.toUpperCase()) ||
+              "CV";
+            const fullLabel =
+              (file.labels && (file.labels[language] || file.labels.es)) ||
+              `${labels.downloadCta[language] || labels.downloadCta.es} (${shortLabel})`;
+
+            return (
+              <a
+                key={`cv-download-${file.language || file.url}`}
+                className="pill-button"
+                href={file.url}
+                download={file.fileName || undefined}
+                aria-label={fullLabel}
+                title={fullLabel}
+              >
+                <FiDownload /> {shortLabel}
+              </a>
+            );
+          })
+        ) : (
+          <a className="pill-button" href="#contacto">
+            <FiDownload /> {labels.downloadCta[language] || labels.downloadCta.es}
+          </a>
+        )}
       </div>
     </motion.nav>
   );
@@ -82,11 +110,21 @@ NavigationBar.propTypes = {
   availability: PropTypes.string.isRequired,
   language: PropTypes.string.isRequired,
   onToggleLanguage: PropTypes.func.isRequired,
-  canToggleLanguage: PropTypes.bool
+  canToggleLanguage: PropTypes.bool,
+  cvFiles: PropTypes.arrayOf(
+    PropTypes.shape({
+      language: PropTypes.string,
+      shortLabel: PropTypes.string,
+      url: PropTypes.string.isRequired,
+      fileName: PropTypes.string,
+      labels: PropTypes.objectOf(PropTypes.string)
+    })
+  )
 };
 
 NavigationBar.defaultProps = {
-  canToggleLanguage: false
+  canToggleLanguage: false,
+  cvFiles: []
 };
 
 export default NavigationBar;
