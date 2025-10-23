@@ -27,6 +27,17 @@ const NavigationBar = ({
   cvFiles
 }) => {
   const downloads = Array.isArray(cvFiles) ? cvFiles : [];
+  const downloadLabel = labels.downloadCta[language] || labels.downloadCta.es;
+  const normalizedLanguage = (language || "").toLowerCase();
+  const activeDownload =
+    downloads.find((file) => (file.language || "").toLowerCase() === normalizedLanguage) ||
+    downloads[0] ||
+    null;
+  const downloadHref = activeDownload ? activeDownload.url : "#contacto";
+  const downloadFileName = activeDownload?.fileName || undefined;
+  const downloadTitle =
+    (activeDownload?.labels && (activeDownload.labels[language] || activeDownload.labels.es)) ||
+    downloadLabel;
 
   return (
     <motion.nav
@@ -66,34 +77,15 @@ const NavigationBar = ({
             <FiGlobe /> {labels.languageToggle[language] || labels.languageToggle.es}
           </button>
         )}
-        {downloads.length > 0 ? (
-          downloads.map((file) => {
-            const shortLabel =
-              (file.shortLabel && file.shortLabel.toUpperCase()) ||
-              (file.language && file.language.toUpperCase()) ||
-              "CV";
-            const fullLabel =
-              (file.labels && (file.labels[language] || file.labels.es)) ||
-              `${labels.downloadCta[language] || labels.downloadCta.es} (${shortLabel})`;
-
-            return (
-              <a
-                key={`cv-download-${file.language || file.url}`}
-                className="pill-button"
-                href={file.url}
-                download={file.fileName || undefined}
-                aria-label={fullLabel}
-                title={fullLabel}
-              >
-                <FiDownload /> {shortLabel}
-              </a>
-            );
-          })
-        ) : (
-          <a className="pill-button" href="#contacto">
-            <FiDownload /> {labels.downloadCta[language] || labels.downloadCta.es}
-          </a>
-        )}
+        <a
+          className="pill-button"
+          href={downloadHref}
+          download={activeDownload ? downloadFileName : undefined}
+          aria-label={downloadTitle}
+          title={downloadTitle}
+        >
+          <FiDownload /> {downloadLabel}
+        </a>
       </div>
     </motion.nav>
   );
